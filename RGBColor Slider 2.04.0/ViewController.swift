@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     @IBOutlet var colorView: UIView!
     
@@ -22,19 +22,47 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        redSlider.minimumValue = 0
+        redSlider.maximumValue = 1
+        redSlider.value = 0.05
         
+        greenSlider.minimumValue = 0
+        greenSlider.maximumValue = 1
+        greenSlider.value = 0.27
+        
+        blueSlider.minimumValue = 0
+        blueSlider.maximumValue = 1
+        blueSlider.value = 0.49
+        
+        redLabel.text = String(format: "%.2f", redSlider.value)
+        greenLabel.text = String(format: "%.2f", greenSlider.value)
+        blueLabel.text = String(format: "%.2f", blueSlider.value)
+        
+        setViewColor()
     }
+    
     @IBAction func redSliderAction() {
-        
+        redLabel.text = String(format: "%.2f", redSlider.value)
+        setViewColor()
     }
     
     @IBAction func greenSliderAction() {
-        
+        greenLabel.text = String(format: "%.2f", greenSlider.value)
+        setViewColor()
     }
     
     @IBAction func blueSliderAction() {
-        
+        blueLabel.text = String(format: "%.2f", blueSlider.value)
+        setViewColor()
     }
     
+    private func setViewColor() {
+        colorView.backgroundColor = UIColor(
+            red: CGFloat(redSlider.value),
+            green: CGFloat(greenSlider.value),
+            blue: CGFloat(blueSlider.value),
+            alpha: 1.0
+        )
+    }
 }
 
