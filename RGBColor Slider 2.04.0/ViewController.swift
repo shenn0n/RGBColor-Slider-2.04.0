@@ -34,28 +34,25 @@ final class ViewController: UIViewController {
         blueSlider.maximumValue = 1
         blueSlider.value = 0.49
         
-        redLabel.text = String(format: "%.2f", redSlider.value)
-        greenLabel.text = String(format: "%.2f", greenSlider.value)
-        blueLabel.text = String(format: "%.2f", blueSlider.value)
+        redLabel.text = string(from: redSlider)
+        greenLabel.text = string(from: greenSlider)
+        blueLabel.text = string(from: blueSlider)
         
         setViewColor()
     }
     
-    @IBAction func redSliderAction() {
-        redLabel.text = String(format: "%.2f", redSlider.value)
+    @IBAction func sliderAction(_ sender: UISlider) {
         setViewColor()
+        switch sender {
+        case redSlider:
+            redLabel.text = string(from: redSlider)
+        case greenSlider:
+            greenLabel.text = string(from: greenSlider)
+        default:
+            blueLabel.text = string(from: blueSlider)
+        }
     }
-    
-    @IBAction func greenSliderAction() {
-        greenLabel.text = String(format: "%.2f", greenSlider.value)
-        setViewColor()
-    }
-    
-    @IBAction func blueSliderAction() {
-        blueLabel.text = String(format: "%.2f", blueSlider.value)
-        setViewColor()
-    }
-    
+        
     private func setViewColor() {
         colorView.backgroundColor = UIColor(
             red: CGFloat(redSlider.value),
@@ -63,6 +60,10 @@ final class ViewController: UIViewController {
             blue: CGFloat(blueSlider.value),
             alpha: 1.0
         )
+    }
+    
+    private func string(from slider: UISlider) -> String {
+        String(format: "%.2f", slider.value)
     }
 }
 
