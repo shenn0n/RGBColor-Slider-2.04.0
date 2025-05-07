@@ -23,6 +23,11 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="5Iz-AP-TCN"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="W4k-c5-RP0">
                                 <rect key="frame" x="16" y="267" width="365" height="110"/>
@@ -86,20 +91,20 @@
                                                 <rect key="frame" x="-2" y="0.0" width="249" height="31"/>
                                                 <color key="minimumTrackTintColor" red="0.57935041190000003" green="0.067131571469999998" blue="0.0056887376120000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <connections>
-                                                    <action selector="redSliderAction" destination="BYZ-38-t0r" eventType="valueChanged" id="UWd-yT-bma"/>
+                                                    <action selector="sliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="Mk1-ZS-Vo6"/>
                                                 </connections>
                                             </slider>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="oFG-lq-72y">
+                                            <slider opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="oFG-lq-72y">
                                                 <rect key="frame" x="-2" y="40" width="249" height="31"/>
                                                 <color key="minimumTrackTintColor" systemColor="systemGreenColor"/>
                                                 <connections>
-                                                    <action selector="greenSliderAction" destination="BYZ-38-t0r" eventType="valueChanged" id="pKW-Vb-wOY"/>
+                                                    <action selector="sliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="bbb-nu-WJl"/>
                                                 </connections>
                                             </slider>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jEE-Ha-42g">
+                                            <slider opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jEE-Ha-42g">
                                                 <rect key="frame" x="-2" y="80" width="249" height="31"/>
                                                 <connections>
-                                                    <action selector="blueSliderAction" destination="BYZ-38-t0r" eventType="valueChanged" id="rWn-kI-hna"/>
+                                                    <action selector="sliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="2ne-sd-c5q"/>
                                                 </connections>
                                             </slider>
                                         </subviews>
@@ -158,7 +163,7 @@
                     <navigationItem key="navigationItem" id="yBN-AZ-RE1">
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="Wv8-b2-ds8">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="presentation" id="Tky-ej-Eo8"/>
+                                <segue destination="BYZ-38-t0r" kind="presentation" identifier="editColor" id="Tky-ej-Eo8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
