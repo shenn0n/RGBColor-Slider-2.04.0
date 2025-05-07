@@ -20,6 +20,7 @@ final class ColorViewController: UIViewController {
     }
 }
 
+// MARK: - ComposeColorViewControllerDelegate
 extension ColorViewController: ComposeColorViewControllerDelegate {
     func setBackgroundColor(_ color: UIColor) {
         view.backgroundColor = color

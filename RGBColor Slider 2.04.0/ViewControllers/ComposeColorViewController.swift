@@ -20,6 +20,10 @@ final class ComposeColorViewController: UIViewController {
     @IBOutlet var greenLabel: UILabel!
     @IBOutlet var blueLabel: UILabel!
     
+    @IBOutlet var redTextField: UITextField!
+    @IBOutlet var greenTextField: UITextField!
+    @IBOutlet var blueTextField: UITextField!
+    
     // MARK: - Public Properties
     var color: UIColor!
     weak var delegate: ComposeColorViewControllerDelegate?
@@ -28,39 +32,55 @@ final class ComposeColorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupSlidersFromColor(from: color)
-        setViewColor()
+        colorView.backgroundColor = color
         
-        redSlider.minimumValue = 0
-        redSlider.maximumValue = 1
+        setValue(for: redSlider, greenSlider, blueSlider)
+        setValue(for: redLabel, greenLabel, blueLabel)
+        setValue(for: redTextField, greenTextField, blueTextField)
         
-        greenSlider.minimumValue = 0
-        greenSlider.maximumValue = 1
+        redTextField.delegate = self
+        greenTextField.delegate = self
+        blueTextField.delegate = self
         
-        blueSlider.minimumValue = 0
-        blueSlider.maximumValue = 1
-        
-        redLabel.text = String(format: "%.2f", redSlider.value)
-        greenLabel.text = String(format: "%.2f", greenSlider.value)
-        blueLabel.text = String(format: "%.2f", blueSlider.value)
-        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
     }
     
     // MARK: - IB Actions
     @IBAction func sliderAction(_ sender: UISlider) {
-        if sender == redSlider {
-            redLabel.text = String(format: "%.2f", redSlider.value)
-        } else if sender == greenSlider {
-            greenLabel.text = String(format: "%.2f", greenSlider.value)
-        } else if sender == blueSlider {
-            blueLabel.text = String(format: "%.2f", blueSlider.value)
+        
+        switch sender {
+        case redSlider:
+            setValue(for: redLabel)
+            setValue(for: redTextField)
+        case greenSlider:
+            setValue(for: greenLabel)
+            setValue(for: greenTextField)
+        default:
+            setValue(for: blueLabel)
+            setValue(for: blueTextField)
         }
+        
         setViewColor()
     }
 
     @IBAction func doneButtonTapped() {
         delegate?.setBackgroundColor(colorView.backgroundColor ?? UIColor.white)
         dismiss(animated: true)
+    }
+    
+    // MARK: - Private Methods
+    private func showAlert(widthTitle: String, andMessage: String, textField: UITextField ) {
+        let alert = UIAlertController(title: widthTitle, message: andMessage, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            textField.text = "0.5"
+            textField.becomeFirstResponder()
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
     
 }
@@ -77,19 +97,90 @@ private extension ComposeColorViewController {
         )
     }
     
-    func setupSlidersFromColor(from color: UIColor) {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
+    func setValue(for colorSlider: UISlider...) {
+        let ciColor = CIColor(color: color)
         
-        if color.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
-            redSlider.value = Float(red)
-            greenSlider.value = Float(green)
-            blueSlider.value = Float(blue)
-        } else {
-            print("Не удалось получить RGB-компоненты из переданного цвета")
+        colorSlider.forEach { slider in
+            switch slider {
+            case redSlider:
+                redSlider.value = Float(ciColor.red)
+            case greenSlider:
+                greenSlider.value = Float(ciColor.green)
+            default:
+                blueSlider.value = Float(ciColor.blue)
+            }
         }
     }
     
+    func setValue(for textField: UITextField...) {
+        
+        textField.forEach { textField in
+            switch textField {
+            case redTextField:
+                textField.text = String(format: "%.2f", redSlider.value)
+            case greenTextField:
+                textField.text = String(format: "%.2f", greenSlider.value)
+            default:
+                textField.text = String(format: "%.2f", blueSlider.value)
+            }
+        }
+    }
+    
+    func setValue(for label: UILabel...) {
+        
+        label.forEach { label in
+            switch label {
+            case redLabel:
+                redLabel.text = String(format: "%.2f", redSlider.value)
+            case greenLabel:
+                greenLabel.text = String(format: "%.2f", greenSlider.value)
+            default:
+                blueLabel.text = String(format: "%.2f", blueSlider.value)
+            }
+        }
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension ComposeColorViewController: UITextFieldDelegate {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        let pattern = "^0(\\.\\d{0,2})?$|^1(\\.0{0,2})?$"
+        let isValueValid = NSPredicate(format: "SELF MATCHES %@", pattern)
+            .evaluate(with: textField.text)
+        
+        if !isValueValid {
+            showAlert(
+                widthTitle: "Wrong format",
+                andMessage: "Plese enter correct volue",
+                textField: textField
+            )
+            
+        } else {
+            
+            let value = Float(textField.text ?? "") ?? 0
+            
+            switch textField {
+            case redTextField:
+                redSlider.setValue(value, animated: true)
+                setValue(for: redLabel)
+            case greenTextField:
+                greenSlider.setValue(value, animated: true)
+                setValue(for: greenLabel)
+            default:
+                blueSlider.setValue(value, animated: true)
+                setValue(for: blueLabel)
+            }
+            
+            setViewColor()
+        }
+        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        textField.resignFirstResponder()
+        return true
+    }
 }
