@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ComposeColorViewControllerViewController.swift
 //  RGBColor Slider 2.04.0
 //
 //  Created by Александр Манжосов on 01.05.2025.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ViewController: UIViewController {
+final class ComposeColorViewController: UIViewController {
     
     @IBOutlet var colorView: UIView!
     
@@ -54,6 +54,10 @@ final class ViewController: UIViewController {
     @IBAction func blueSliderAction() {
         blueLabel.text = String(format: "%.2f", blueSlider.value)
         setViewColor()
+    }
+    
+    @IBAction func doneButtonTapped() {
+        dismiss(animated: true)
     }
     
     private func setViewColor() {
