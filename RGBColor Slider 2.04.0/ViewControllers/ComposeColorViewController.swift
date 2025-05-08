@@ -75,8 +75,24 @@ final class ComposeColorViewController: UIViewController {
     // MARK: - Private Methods
     private func showAlert(widthTitle: String, andMessage: String, textField: UITextField ) {
         let alert = UIAlertController(title: widthTitle, message: andMessage, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+        let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            
             textField.text = "0.5"
+            let value = Float(textField.text ?? "") ?? 0
+            
+            switch textField {
+            case self.redTextField:
+                self.redSlider.setValue(value, animated: true)
+                self.setValue(for: self.redLabel)
+            case self.greenTextField:
+                self.greenSlider.setValue(value, animated: true)
+                self.setValue(for: self.greenLabel)
+            default:
+                self.blueSlider.setValue(value, animated: true)
+                self.setValue(for: self.blueLabel)
+            }
+            self.setViewColor()
             textField.becomeFirstResponder()
         }
         alert.addAction(okAction)
